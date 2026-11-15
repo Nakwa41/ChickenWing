@@ -4,7 +4,7 @@ Application locale de préparation de shows pour les consoles Behringer WING, WI
 
 ## Télécharger la bêta
 
-Sur GitHub, ouvrez **Releases → ChickenWing 1.11.2 bêta 1 → Assets** et choisissez l’archive de votre système. Les versions de bureau intègrent le navigateur et les ressources OCR. Consultez les [instructions d’installation et les notes de version](docs/BETA.md).
+Ouvrez la version la plus récente sur la [page de téléchargement de ChickenWing](https://github.com/Nakwa41/ChickenWing/releases), puis choisissez l’archive de votre système dans **Assets**. Les versions de bureau intègrent le navigateur et les ressources OCR. Consultez les [instructions d’installation et les nouveautés de la bêta](docs/BETA.md).
 
 Vous préparez la publication du projet ? Suivez le [guide GitHub](docs/GITHUB.md).
 

@@ -1,17 +1,22 @@
-# ChickenWing 1.11.2 bêta 1
+# ChickenWing 1.11.2 bêta 2
 
 ChickenWing prépare les shows pour les consoles Behringer WING, Midas M32 et Yamaha QL, CL et DM. Cette bêta inclut la préparation du patch et du routage, l’import de fiches techniques, la fiche A4 et le convertisseur Show Evangelist.
 
+## Nouveautés de la bêta 2
+
+- La recherche de micros et de DI reconnaît davantage d’abréviations. Dans l’inspecteur, la correspondance apparaît en tête des suggestions. Exemples de saisie : B58, B52 et K184.
+- L’aperçu d’import propose un modèle quand une seule correspondance approximative se dégage et laisse le 48 V en manuel jusqu’à confirmation. Les références ambiguës restent en texte libre. Toute indication de 48 V explicite dans la fiche reste prioritaire.
+
 ## Téléchargement
 
-Dans **Releases → Assets**, choisissez une archive selon votre machine.
+Sur la [page de téléchargement de la bêta 2](https://github.com/Nakwa41/ChickenWing/releases/tag/v1.11.2-beta.2), choisissez une archive selon votre machine dans **Assets**.
 
 | Machine | Fichier |
 | --- | --- |
-| Mac avec puce Apple M1, M2 ou plus récente | `ChickenWing-1.11.2-beta.1-mac-arm64.zip` |
-| Mac avec processeur Intel | `ChickenWing-1.11.2-beta.1-mac-x64.zip` |
-| PC Windows 10 ou 11 64 bits, avec processeur Intel ou AMD | `ChickenWing-1.11.2-beta.1-windows-x64.zip` |
-| PC Windows 11 avec processeur ARM, par exemple Snapdragon | `ChickenWing-1.11.2-beta.1-windows-arm64.zip` |
+| Mac avec puce Apple M1, M2 ou plus récente | `ChickenWing-1.11.2-beta.2-mac-arm64.zip` |
+| Mac avec processeur Intel | `ChickenWing-1.11.2-beta.2-mac-x64.zip` |
+| PC Windows 10 ou 11 64 bits, avec processeur Intel ou AMD | `ChickenWing-1.11.2-beta.2-windows-x64.zip` |
+| PC Windows 11 avec processeur ARM, par exemple Snapdragon | `ChickenWing-1.11.2-beta.2-windows-arm64.zip` |
 
 **Mac, macOS Ventura 13 ou plus récent.** Pour identifier votre Mac, allez dans ** → À propos de ce Mac** et regardez la ligne **Puce** ou **Processeur**. Décompressez l’archive, déplacez `ChickenWing.app` dans **Applications**, puis ouvrez-la. Cette bêta utilise une signature locale et n’a pas de notarisation Apple. Gatekeeper peut afficher un avertissement ou bloquer l’ouverture. [Informations Apple](https://support.apple.com/fr-fr/102445)
 

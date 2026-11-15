@@ -46,7 +46,7 @@ Ouvrez cette adresse sur iPhone ou Android dans Safari ou Chrome. C’est une b�
 
 ## Construire une prochaine bêta
 
-Depuis un Mac avec Node.js 22.12 ou une version plus récente et npm, mettez à jour la version du projet avec `npm version 1.11.2-beta.2 --no-git-tag-version`, puis exécutez ces commandes dans le dossier du projet.
+Depuis un Mac avec Node.js 22.12 ou une version plus récente et npm, mettez à jour la version du projet, par exemple avec `npm version prerelease --preid beta --no-git-tag-version`, puis exécutez ces commandes dans le dossier du projet.
 
 ```sh
 npm ci
@@ -54,4 +54,4 @@ npm test
 npm run dist
 ```
 
-Les archives et leurs empreintes SHA-256 sont produites dans `releases/v1.11.2-beta.2/`. Le premier build télécharge le moteur Electron pour chaque plateforme. Pour ne construire qu’une archive, utilisez par exemple `npm run dist -- mac-arm64`. Après vos essais, créez un commit dans GitHub Desktop et cliquez sur **Push origin**. Créez une nouvelle release avec le nouveau tag et les nouveaux fichiers. Mettez à jour les noms de fichiers dans les notes de cette release.
+Les archives et leurs empreintes SHA-256 sont produites dans le sous-dossier `releases/` correspondant à la version. Le premier build télécharge le moteur Electron pour chaque plateforme. Pour construire une seule archive, utilisez par exemple `npm run dist -- mac-arm64`. Après vos essais, créez un commit dans GitHub Desktop et cliquez sur **Push origin**. Créez une nouvelle release avec le nouveau tag et les nouveaux fichiers. Mettez à jour le lien de téléchargement dans le README et les notes de version.
