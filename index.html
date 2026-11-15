@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101213">
+  <meta name="description" content="ChickenWing, votre espace de préparation de shows pour Behringer WING, Midas M32 et Yamaha QL, CL, DM. Patch, routing, effets et snapshots, entièrement en local.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>ChickenWing — Préparez votre prochain live</title>
+  <link rel="icon" href="./public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="app"><div class="boot">CHICKEN<span>WING</span><small>Ouverture de votre espace de travail…</small></div></div>
+  <div id="modal-root"></div>
+  <div id="toasts" aria-live="polite"></div>
+  <script src="./public/vendor/xlsx.full.min.js"></script>
+  <script src="./public/vendor/tesseract.js/dist/tesseract.min.js"></script>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

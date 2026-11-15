@@ -1,0 +1,159 @@
+.modal:has(.export-switch) .modal-body { padding: 0; }
+.modal.wide:has(.sheet-workspace) { width: 1180px; }
+
+.export-switch {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #192127;
+  border-bottom: 1px solid var(--border);
+}
+.export-switch .btn { text-align: left; }
+.export-switch .btn[aria-pressed="true"] { background: var(--gold-bg); border-color: #8d7249; color: var(--gold); }
+.export-file-panel { padding: 25px 27px; }
+
+.sheet-workspace {
+  display: grid;
+  grid-template-columns: 218px minmax(0, 1fr);
+  align-items: start;
+}
+
+.sheet-settings { padding: 20px 16px; }
+.sheet-settings .field { margin-bottom: 24px; }
+.sheet-settings fieldset { border: 0; padding: 0; margin: 0 0 24px; min-width: 0; }
+.sheet-settings legend { color: #e1e6e8; font-size: 12px; font-weight: 650; margin-bottom: 9px; }
+.sheet-settings fieldset label { display: flex; gap: 8px; align-items: center; padding: 6px 0; color: #c3cbd0; cursor: pointer; }
+.sheet-settings input { accent-color: var(--gold); margin: 0; }
+.sheet-print-hint { color: #a0aeb6; font-size: 11px; line-height: 1.6; }
+#sheet-snapshot-file { margin: -8px 0 18px; }
+#sheet-snapshot-file:empty { display: none; }
+
+.sheet-preview { min-width: 0; border-left: 1px solid var(--border); background: #101518; }
+.sheet-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #b2bdc4;
+  font-size: 11px;
+}
+.sheet-preview-bar span:first-child { display: flex; align-items: center; gap: 8px; color: #d7dfe2; }
+.sheet-preview-scroll { overflow: auto; }
+.sheet-pages { padding: 18px; }
+.sheet-empty { padding: 24px; color: #bcc6cd; }
+
+.sheet-page {
+  --paper: #fff;
+  --ink: #182b33;
+  --paper-muted: #485961;
+  --paper-accent: #1e585e;
+  --paper-line: #bec9cd;
+  --paper-alert: #854013;
+  width: 210mm;
+  height: 296.8mm;
+  padding: 12mm 13mm 10mm;
+  margin: 0 auto 18px;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  font: 10pt/1.3 Arial, sans-serif;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.sheet-pages[data-theme="dark"] .sheet-page {
+  --paper: #151d23;
+  --ink: #edf1f3;
+  --paper-muted: #b3c2ca;
+  --paper-accent: #99d6cb;
+  --paper-line: #52636d;
+  --paper-alert: #ffc188;
+}
+
+.sheet-page > header { border-top: 2.5pt solid var(--paper-accent); padding-top: 8pt; margin-bottom: 16pt; }
+.sheet-masthead, .sheet-running-header, .sheet-page footer { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; }
+.sheet-masthead { font-size: 8pt; font-weight: 700; letter-spacing: .12em; color: var(--paper-accent); }
+.sheet-page h2 { margin: 9pt 0 5pt; font-size: 26pt; line-height: 1.08; letter-spacing: -.035em; }
+.sheet-identity, .sheet-revision { display: flex; gap: 3pt 11pt; flex-wrap: wrap; }
+.sheet-identity { color: var(--paper-muted); }
+.sheet-revision { margin-top: 9pt; font-size: 9pt; }
+.sheet-revision strong { color: var(--paper-accent); }
+.sheet-running-header { font-size: 9pt; color: var(--paper-muted); }
+.sheet-running-header strong { color: var(--ink); }
+.sheet-running-header span { text-align: right; }
+.sheet-page-body { flex: 1; min-height: 0; }
+.sheet-section + .sheet-section { margin-top: 13pt; }
+.sheet-section h3 { display: flex; gap: 9pt; align-items: baseline; font-size: 14pt; letter-spacing: -.018em; }
+.sheet-section h3 small { font-size: 7pt; letter-spacing: .12em; color: var(--paper-muted); }
+.sheet-legend, .sheet-no-data { color: var(--paper-muted); margin-top: 4pt; font-size: 8.5pt; }
+.sheet-page table { border-collapse: collapse; table-layout: fixed; width: 100%; margin-top: 6pt; }
+.sheet-page table + table { margin-top: 10pt; }
+.sheet-page caption { padding: 4pt 0; text-align: left; color: var(--paper-accent); font-size: 10pt; font-weight: 700; }
+.sheet-page th { border-top: 1pt solid var(--paper-line); font-size: 8pt; color: var(--paper-muted); text-align: left; }
+.sheet-page th, .sheet-page td { padding: 4pt 5pt; border-bottom: .5pt solid var(--paper-line); vertical-align: top; }
+.sheet-page td { white-space: pre-line; }
+.sheet-page td small { display: block; font-size: 8.5pt; color: var(--paper-muted); margin-top: 1pt; }
+.sheet-page td.sheet-alert { color: var(--paper-alert); font-weight: 700; }
+.sheet-page footer { margin-top: 8pt; padding-top: 5pt; border-top: .5pt solid var(--paper-line); color: var(--paper-muted); font-size: 7.5pt; letter-spacing: .09em; }
+.sheet-page-number { white-space: nowrap; }
+.sheet-page.sheet-oversize { height: auto; min-height: 296.8mm; }
+
+@media screen {
+  .sheet-preview { container-type: inline-size; }
+  .sheet-page { box-shadow: 0 4px 16px #0005; }
+  @container (max-width: 830px) { .sheet-page { zoom: .82; } }
+  @container (max-width: 690px) { .sheet-page { zoom: .66; } }
+  @container (max-width: 560px) { .sheet-page { zoom: .53; } }
+  @media (max-width: 780px) {
+    .sheet-workspace { grid-template-columns: 1fr; }
+    .sheet-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 14px 18px; }
+    .modal .sheet-settings .field, .sheet-settings fieldset, #sheet-snapshot-file { margin: 0; }
+    .sheet-preview { border-left: 0; border-top: 1px solid var(--border); }
+  }
+  @media (max-width: 480px) {
+    .export-switch .btn { font-size: 10px; padding: 8px 10px; }
+    .export-file-panel { padding: 20px; }
+    .sheet-settings { grid-template-columns: 1fr; }
+  }
+}
+
+@page chickenwing-a4 { size: A4 portrait; margin: 0; }
+
+@media print {
+  body:has(.sheet-page) { background: #fff; }
+  body:has(.sheet-page) :is(#app, #toasts, .modal-header, .modal-footer, .export-switch, .sheet-controls, .sheet-settings, .sheet-preview-bar) { display: none !important; }
+  body:has(.sheet-page) .modal-backdrop { position: static; backdrop-filter: none; animation: none; }
+  body:has(.sheet-page) :is(#modal-root, .modal-backdrop, .modal, .modal-body, .sheet-workspace, .sheet-preview, .sheet-preview-scroll, .sheet-pages) {
+    display: block;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+  .sheet-page {
+    page: chickenwing-a4;
+    margin: 0;
+    break-after: page;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .sheet-pages[data-theme="dark"] .sheet-page { height: 297mm; }
+  .sheet-page:last-child { break-after: auto; }
+}

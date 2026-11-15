@@ -1,0 +1,8 @@
+docs/wing-format-reference.snap
+docs/roundtrip*.snap
+node_modules/
+.DS_Store
+__pycache__/
+*.pyc
+releases/
+output/

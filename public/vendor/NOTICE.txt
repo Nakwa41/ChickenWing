@@ -1,0 +1,9 @@
+Local third-party components in ChickenWing
+
+PDF.js: Apache-2.0; see PDFJS-LICENSE.
+SheetJS CE 0.20.3: Apache-2.0; see SHEETJS-LICENSE.
+Tesseract.js: Apache-2.0; see tesseract.js/LICENSE.md or LICENSE and bundled distribution notices.
+Tesseract.js-core: Apache-2.0; see tesseract.js-core/LICENSE.
+English and French OCR data: Tesseract OCR language data, Apache-2.0.
+
+Upstream source URLs are listed in README.md. All browser assets are local.
