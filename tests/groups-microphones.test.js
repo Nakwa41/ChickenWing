@@ -60,4 +60,12 @@ test('Samson C02 is searchable with common spellings and enables phantom on both
 
 test('short model prefixes offer useful quick suggestions without broad DI false matches',()=>{const sm=searchMicrophones({query:'sm'});assert.ok(sm.some(m=>m.model==='SM7dB'));assert.ok(sm.some(m=>m.model==='SM81'));assert.ok(searchMicrophones({query:'c0'}).some(m=>m.id==='samsonc02'));assert.ok(searchMicrophones({query:'di'}).every(m=>['di','dp'].includes(m.type)));});
 
+test('quick search prioritizes aliases and approximate references, and offers ambiguous variants',()=>{
+ const quick=query=>searchMicrophones({query,sort:'relevance'}).map(m=>m.id);
+ for(const [query,id] of [['B58','shurebeta58a'],['B 58','shurebeta58a'],['K184','neumannkm184'],['Senn 906','sennheisere906']]){
+  assert.equal(quick(query)[0],id,query);
+ }
+ assert.deepEqual(quick('B 87').sort(),['shurebeta87a','shurebeta87c']);
+});
+
 test('freeing a DCA clears its links and all strip memberships while preserving colors, other DCAs and mute groups',()=>{const s=demoShow();initializeGroups(s);configureCategoryDca(s,'Batterie',{n:4,follow:true});setAssignment(s,'MAIN.1','dca',4,true);setAssignment(s,'CH.1','dca',8,true);setAssignment(s,'CH.1','mute',1,true);clearDca(s,4);initializeGroups(s);assert.equal(isDcaConfigured(s,4),false);assert.equal(s.categoryDcas.Batterie,undefined);assert.equal(s.channels[0].category,'Batterie');assert.deepEqual(getAssignment(s,'CH.1'),{dcas:[8],mutes:[1]});assert.deepEqual(getAssignment(s,'MAIN.1').dcas,[]);});

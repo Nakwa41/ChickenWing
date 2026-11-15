@@ -5,6 +5,8 @@ export function riderHeading(value){
  const repeated=(word)=>letters===word||letters===word+word||letters===word.split('').map(c=>c+c).join('');
  if(['son','audio','sound','sonorisation','regieson'].some(repeated))return 'audio';
  if(['lumiere','eclairage','lighting','interphonie','intercom','logistique','loges','plateau','captation','clausescontractuelles'].some(repeated))return 'other';
+ if(/^(?:patch (?:son|audio)|audio patch)$/.test(n))return 'audio';
+ if(/^backline(?:\s*[:/–-].*)?$/.test(n))return 'other';
  // Some PDF text layers duplicate every glyph in large section titles.
  if(['son','ssoonn','audio','sound','sonorisation','regieson','soundrequirements'].includes(letters))return 'audio';
  if(/^(?:patch\s+)?(?:lumiere|eclairage|lighting|light plot|plan de feu|lx\s*\d*|logistique|logistics|contacts?|regisseur general|plateau|stage requirements|stage plot|plan de scene|video|interphonie|intercom|captation|loges|clauses contractuelles|liste (?:complete )?(?:du )?materiel)\b/.test(n)||['lluum miieerree'.replace(/ /g,''),'lluumieireere','lluumiieree'].includes(letters)||/^l+u+m+[iie]+[re]+$/.test(letters))return 'other';

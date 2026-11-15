@@ -1,5 +1,5 @@
 import {channel,uid,BANKS} from './core.js';
-import {resolveMic,applyMicrophone} from './microphones.js';
+import {normalizeMic,resolveMic,matchImportedMic,recommendation,applyMicrophone} from './microphones.js';
 import {riderHeading,nonAudioEvidence,audioSourceEvidence,inlinePatchHeader,inlinePatchEntries,collectAudioContext} from './rider-context.js';
 export {readRider,readRiderDocument} from './rider-reader.js';
 
@@ -69,30 +69,50 @@ function address(value){
 }
 export function setImportedMic(c,value,phantom='',custom=[]){
  c.mic=clean(value);delete c.micId;delete c.micProfile;delete c.phantomMode;delete c.powerChoice;c.phantom=false;
- const m=resolveMic(c.mic,custom);
- if(m){try{applyMicrophone({channels:[c]},c,m);}catch{/* Unverified local references stay manual. */}}
+ delete c.importMeta?.micOriginal;delete c.importMeta?.micApproximate;
+ const original=c.mic,match=matchImportedMic(original,custom,{bareNumber:true});
+ if(match&&recommendation(match.model)!==null){
+  applyMicrophone({channels:[c]},c,match.model);
+  if(match.approximate){c.phantom=false;c.phantomMode='manual';}
+  if(c.importMeta&&(match.approximate||normalizeMic(c.mic)!==normalizeMic(original))){c.importMeta.micOriginal=original;if(match.approximate)c.importMeta.micApproximate=true;}
+ }
  const p=normalize(phantom);if(p){c.phantom=/^(oui|yes|true|on|1|\+|\+?48\s*v|p48|x)$/.test(p);c.phantomMode='manual';}
  return c;
 }
-function splitNumberedLine(line){
- const m=line.match(/^\s*((?:(?:CH|BUS|AUX|MIX)\s*)?\d{1,3}(?:\s*[-–/]\s*\d{1,3})?)\s*[.):]?\s+(.+)$/i);
- if(!m)return [line];
- const parts=m[2].split(/\s{2,}|\s*\|\s*/);if(parts.length>1)return [m[1],...parts];
- // OCR often loses table spacing. Only split off an exactly recognized mic suffix.
- const words=m[2].split(/\s+/);
- for(let i=1;i<words.length;i++)if(resolveMic(words.slice(i).join(' ')))return [m[1],words.slice(0,i).join(' '),words.slice(i).join(' ')];
- return [m[1],m[2]];
-}
-function micInLabel(value,custom=[]){
- const words=clean(value).split(/\s+/);
- for(let size=Math.min(words.length,6);size>0;size--)for(let start=0;start+size<=words.length;start++){
-  const model=resolveMic(words.slice(start,start+size).join(' '),custom);if(model)return model;
+// Extra equipment or a choice of models makes a fragment unsafe to identify on its own.
+const compoundMicLabel=value=>/\b(?:ou|or|hf|wireless|sans fil|axient|caps(?:ules?)?|transmitter|emetteur)\b|[,;]|\s[/+]|[/+]\s/.test(normalize(value));
+function micSuffix(words,custom){
+ for(let i=1;i<words.length;i++){
+  const source=words.slice(0,i).join(' '),label=words.slice(i).join(' '),match=/\p{L}/u.test(label)&&matchImportedMic(label,custom);
+  if(match&&(!match.approximate||audioSourceEvidence(source)))return {source,label};
  }
  return null;
 }
+function splitNumberedLine(line,custom){
+ const m=line.match(/^\s*((?:(?:CH|BUS|AUX|MIX)\s*)?\d{1,3}(?:\s*[-–/]\s*\d{1,3})?)\s*[.):]?\s+(.+)$/i);
+ if(!m)return [line];
+ const parts=m[2].split(/\s{2,}|\s*\|\s*/);if(parts.length>1)return [m[1],...parts];
+ // OCR often loses table spacing. Look for a model at the end of the line.
+ const mic=compoundMicLabel(m[2])?null:micSuffix(m[2].split(/\s+/),custom);
+ return mic?[m[1],mic.source,mic.label]:[m[1],m[2]];
+}
+function micInLabel(value,custom=[]){
+ const label=clean(value);
+ if(matchImportedMic(label,custom))return label;
+ if(compoundMicLabel(label))return '';
+ const words=label.split(/\s+/);
+ let found=null;
+ for(let start=0;start<words.length;start++)for(let size=Math.min(words.length-start,6);size>0;size--){
+  const part=words.slice(start,start+size).join(' '),model=/\p{L}/u.test(part)&&resolveMic(part,custom);
+  if(!model)continue;
+  if(found&&model.id!==found.id)return '';
+  found={label:part,id:model.id};start+=size-1;break;
+ }
+ return found?.label||micSuffix(words,custom)?.label||'';
+}
 function describePatchMic(c,context,custom){
  const direct=micInLabel(c.name,custom);
- if(direct){setImportedMic(c,`${direct.brand} ${direct.model}`,'',custom);c.importMeta.micEvidence=`Nom du patch : ${c.name}`;return;}
+ if(direct){setImportedMic(c,direct,c.importMeta.phantom,custom);c.importMeta.micEvidence=`Nom du patch : ${c.name}`;return;}
  let candidates=[];
  if(/^dpa\s*\d*$/i.test(c.name))candidates=(context?.inventory||[]).filter(i=>/^DPA\s+\S+/i.test(i.label));
  else if(/^(?:micro\s*)?main\s+\d+$/i.test(c.name))candidates=(context?.inventory||[]).filter(i=>/micro\s+main|handheld/i.test(i.label));
@@ -100,7 +120,7 @@ function describePatchMic(c,context,custom){
  const unique=[...new Map(candidates.map(i=>[normalize(i.label),i])).values()];
  if(unique.length===1){
   const item=unique[0],known=micInLabel(item.label,custom);
-  setImportedMic(c,known?`${known.brand} ${known.model}`:item.label,'',custom);
+  setImportedMic(c,known||item.label,c.importMeta.phantom,custom);
   c.importMeta.micEvidence=`${item.section} : ${item.evidence}`;
   c.importMeta.notes=[c.importMeta.notes,`Référence issue de l’inventaire son : ${item.evidence}`].filter(Boolean).join(' · ');
  }
@@ -144,7 +164,7 @@ export function parseRider(text,options={}) {
   if(!manual&&/^(patch\s*(?:d['’]\s*)?)?(sorties|outputs|output list|monitors|retours)\b/.test(norm)){scope='audio';kind='outputs';map=null;inline=null;trusted=true;retain(joined);continue;}
   if(!manual&&/^(patch\s*(?:d['’]\s*)?)?(entrees|inputs|input list|channels)\b/.test(norm)){scope='audio';kind='inputs';map=null;inline=null;trusted=true;retain(joined);continue;}
   if(h.name!==undefined&&(h.n!==undefined||h.mic!==undefined||h.bus!==undefined))continue;
-  if(!map&&row.length===1)row=splitNumberedLine(joined);
+  if(!map&&row.length===1)row=splitNumberedLine(joined,options.customMics);
   const get=k=>map?.[k]!==undefined&&map[k]!==''?clean(row[map[k]]):'';
   const nText=map?(map.n!==undefined?get('n'):String(nextNumber)):row[0];
   const numberMatch=clean(nText).match(/^(?:(?:CH|BUS|AUX|MIX)\s*)?(\d{1,3})(?:\s*[-–/]\s*(\d{1,3}))?[.)]?$/i);
@@ -171,7 +191,9 @@ export function parseRider(text,options={}) {
   }else{
    const gainText=get('gain'),gain=Number(gainText.replace(',','.').replace(/\s*db$/i,''));
    const c=channel(number,{name,mic,category:guessCategory(name),bank,input:physical.port??number,mode,gain:gainText?gain:0,reviewed:false,importMeta:meta});
-   setImportedMic(c,c.mic,meta.phantom,options.customMics);c.spare=/\b(spare|backup|secours)\b/i.test(c.name);channels.push(c);nextInput=Math.max(nextInput,number+1);
+   setImportedMic(c,c.mic,meta.phantom,options.customMics);
+   if(!mic)describePatchMic(c,options.context,options.customMics);
+   c.spare=/\b(spare|backup|secours)\b/i.test(c.name);channels.push(c);nextInput=Math.max(nextInput,number+1);
   }
   nextNumber=number+1;
  }

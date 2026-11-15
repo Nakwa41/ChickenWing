@@ -180,7 +180,7 @@ Le tri **Popularité indicative**, ainsi que les tris live et studio, repose sur
 
 Dans l’inspecteur d’une voie, **Choisir dans la base** ouvre la même bibliothèque. Choisir un modèle prépare automatiquement son **48 V sur la source physique**. Le choix s’applique aussi aux voies utilisant exactement la même source. Les DI actives à pile ou phantom offrent un choix d’alimentation ; les rubans passifs, les modèles à boîtier dédié et les capsules HF sont distingués des modèles à phantom. Le SM7dB peut être préparé en mode actif ou bypass ; le D12 VR en passif ou avec filtres actifs. Une capsule miniature sans adaptateur identifié et un micro hybride à sorties séparées restent signalés à vérifier. Une source USB, AES/EBU ou autre interface sans commande de phantom indique le besoin d’une alimentation en amont. Les microphones stéréo demandent de compléter le câblage des deux canaux ; le modèle choisi ne réalloue pas le patch.
 
-Le bouton 48 V reste disponible en manuel. Les modèles de patchs et les imports appliquent aussi le 48 V des références reconnues exactement ; une indication 48 V explicite de la fiche reste prioritaire. Une saisie libre du nom d’un micro ne déclenche aucune supposition : la fiche reconnue propose « Appliquer le 48 V conseillé ». Les shows déjà enregistrés gardent leur état de phantom jusqu’à un choix explicite. L’application prépare le fichier ; elle ne commande pas une console connectée. Les sources et règles de la base sont décrites dans [docs/MICROPHONES.md](docs/MICROPHONES.md).
+Le bouton 48 V reste disponible en manuel. Les modèles de patchs et les imports préparent aussi le 48 V des références exactes et des alias connus ; une indication 48 V explicite de la fiche reste prioritaire. Dans l’aperçu d’import, les modèles déduits de libellés incomplets ou approximatifs sont signalés pour confirmation, avec le 48 V en manuel. Les shows déjà enregistrés gardent leur état de phantom jusqu’à un choix explicite. L’application prépare le fichier ; elle ne commande pas une console connectée. Les sources et règles de la base sont décrites dans [docs/MICROPHONES.md](docs/MICROPHONES.md).
 
 ## Nouveautés de la version 1.1
 
@@ -220,7 +220,7 @@ CH;Source;Micro;Mode;Banque;Entrée;48V;Gain
 
 Une section de sorties peut avoir les colonnes `Bus;Nom;Mode;Sortie`. Exemple : `1;IEM Lead;ST;AES50 B 9`.
 
-Les valeurs absentes utilisent des propositions explicites : mono, interface choisie dans l’aperçu (AES50 A par défaut), premier port libre adapté au format, gain 0 dB et 48 V désactivé sauf référence exacte reconnue. Les voies importées restent marquées à vérifier. Les annotations non comprises sont conservées dans le projet.
+Les valeurs absentes utilisent des propositions explicites : mono, interface choisie dans l’aperçu (AES50 A par défaut), premier port libre adapté au format, gain 0 dB et 48 V désactivé sauf nom exact ou alias connu. Ainsi, `B52` retrouve le Shure BETA 52A. Une référence comme `Neum KM184` propose le Neumann KM 184 sans activer le 48 V. Une mention ambiguë comme `C414` est conservée dans la colonne Micro / DI. Les voies importées restent marquées à vérifier. Les annotations non comprises sont conservées dans le projet.
 
 ## Export WING
 

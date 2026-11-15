@@ -38,6 +38,7 @@ test('insert requests and microphone alternatives survive the complete import pl
  const r=parseRiderDocument({filename:'image.png',sections:[{id:'image',label:'Image',text}]}),p=planRiderImport(newShow(),r,{target:'new',name:'Image',model:'wing'});
  assert.deepEqual(p.errors,[]);assert.equal(p.show.channels.length,14);assert.equal(p.show.fx.length,0);assert.equal(p.show.channels[4].importMeta.insert,'GATE');assert.ok(p.show.channels[4].importMeta.notes.includes('GATE'));
  assert.deepEqual(p.show.channels.filter(c=>c.importMeta.insert==='COMP').map(c=>c.n),[1,2,3,8,9,10,11,14]);
+ assert.deepEqual(p.show.channels.slice(0,2).map(c=>[c.micId,c.phantom]),[['shurebeta91a',true],['shurebeta52a',false]]);
  assert.equal(p.show.channels[5].mic,'SM81, KM184');assert.equal(p.show.channels[5].phantom,false);assert.equal(p.show.channels[7].mic,'Radial, BSS');assert.ok(p.show.channels[10].mic.includes('421'));
  assert.equal(assertProject(p.show).channels[4].importMeta.insert,'GATE');assert.ok(p.show.channels.every(c=>!c.reviewed));
 });

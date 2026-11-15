@@ -33,6 +33,15 @@ test('equipment, contact, lighting and logistics lists cannot become inputs with
   const r=parseRider(text);assert.equal(r.channels.length,0,text);assert.equal(r.outputs.length,0,text);
  }
 });
+test('numbered backline prose is ignored and an explicit audio patch starts a new section',()=>{
+ const backline='BACKLINE\nNous apportons une batterie complète.\n5 fûts (3 toms) avec un siège réglable et 5 pieds de cymbales';
+ const patch='PATCH SON\nN°\tDésignation\tMicros\n5\tTom medium\tD4';
+ const sections=[{id:'page-1',label:'Page 1',text:backline},{id:'page-2',label:'Page 2',text:patch}];
+ const r=parseRiderDocument({sections});
+ assert.deepEqual(r.selectedIds,['page-2']);
+ assert.deepEqual(r.channels.map(({n,name})=>[n,name]),[[5,'Tom medium']]);
+ assert.deepEqual(parseRider(`${backline}\n${patch}`).channels.map(c=>c.name),['Tom medium']);
+});
 test('a numbered prose paragraph after a numberless table cannot become a channel',()=>{
  const r=parseRider('Source;Micro\nVoix;SM58\nMerci de prévoir un responsable\nLUMIÈRE\n1 GrandMA2');assert.equal(r.channels.length,1);assert.equal(r.channels[0].name,'Voix');
 });

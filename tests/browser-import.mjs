@@ -54,9 +54,18 @@ try{
  await page.locator('#save-state').filter({hasText:'Enregistré en local'}).waitFor();
  await page.reload();await page.locator('.title-line h1').filter({hasText:'Import browser verification'}).waitFor();
  // Append allocates around existing pairs; undo restores the prior show.
- await page.locator('[data-action="import"]').click();await page.locator('#paste-patch').fill('CH;Source;Micro\n1;New Vocal;SM58');await page.locator('[data-action="parse-paste"]').click();
+ await page.locator('[data-action="import"]').click();await page.locator('#paste-patch').fill('CH;Source;Micro\n1;New Vocal;B58\n2;Overhead;K184\n3;Spare;C414');await page.locator('[data-action="parse-paste"]').click();
+ const mics=page.locator('[data-import-row][data-key="mic"]'),power=page.locator('[data-import-power]');
+ assert.deepEqual(await mics.evaluateAll(fields=>fields.map(el=>el.value)),['Shure BETA 58A','K184','C414']);
+ assert.ok(await page.getByText('Modèle proposé : Neumann KM 184 · à confirmer').isVisible());
+ assert.ok(await page.getByText('Référence libre · à vérifier',{exact:true}).isVisible());
+ assert.match(await power.nth(1).innerText(),/^OFF/);
+ const override=page.locator('[data-import-row][data-key="phantom"]').nth(1);
+ await override.selectOption('oui');assert.match(await power.nth(1).innerText(),/^ON · manuel/);
+ await override.selectOption('');assert.match(await power.nth(1).innerText(),/^OFF/);
+ await mics.nth(1).fill('Neumann KM 184');await mics.nth(1).press('Tab');assert.match(await power.nth(1).innerText(),/^ON · auto/);
  await page.locator('[data-import-option="target"]').selectOption('append');await page.locator('[data-action="confirm-import"]').click();
- assert.equal(await page.locator('.patch-table tbody tr').count(),4);await page.locator('[data-action="undo"]').click();assert.equal(await page.locator('.patch-table tbody tr').count(),3);
+ assert.equal(await page.locator('.patch-table tbody tr').count(),6);await page.locator('[data-action="undo"]').click();assert.equal(await page.locator('.patch-table tbody tr').count(),3);
  // Unusual columns can be mapped and excluded without leaving the preview.
  await page.locator('[data-action="import"]').click();await page.locator('#paste-patch').fill('Model;Instrument label\nSM57;Guitar');await page.locator('[data-action="parse-paste"]').click();
  await page.getByText('Régler la lecture des colonnes',{exact:true}).click();await page.locator('[data-import-map="name"]').selectOption('1');await page.locator('[data-import-map="mic"]').selectOption('0');await page.locator('#import-start-row').fill('2');await page.locator('[data-action="import-map"]').click();assert.equal(await page.locator('.import-edit-table tbody tr').count(),1);

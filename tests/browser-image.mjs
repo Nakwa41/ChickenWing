@@ -15,7 +15,7 @@ try{
  await page.locator('[data-action="import"]').click();await page.locator('#rider-file').setInputFiles(imagePath);await page.locator('[data-action="confirm-import"]').waitFor({timeout:120000});
  assert.equal(await page.locator('.import-edit-table tbody tr').count(),14);
  const ns=await page.locator('[data-import-row][data-key="n"]').evaluateAll(els=>els.map(el=>Number(el.value)));assert.deepEqual(ns,Array.from({length:14},(_,i)=>i+1));
- const mics=await page.locator('[data-import-row][data-key="mic"]').evaluateAll(els=>els.map(el=>el.value));assert.equal(mics[0],'B91');assert.equal(mics[1],'B52');assert.equal(mics[5],'SM81, KM184');assert.equal(mics[7],'Radial, BSS');assert.ok(mics[10].includes('421'));assert.equal(mics[12],'XLR');
+ const mics=await page.locator('[data-import-row][data-key="mic"]').evaluateAll(els=>els.map(el=>el.value));assert.equal(mics[0],'Shure BETA 91A');assert.equal(mics[1],'Shure BETA 52A');assert.equal(mics[5],'SM81, KM184');assert.equal(mics[7],'Radial, BSS');assert.ok(mics[10].includes('421'));assert.equal(mics[12],'XLR');
  const names=await page.locator('[data-import-row][data-key="name"]').evaluateAll(els=>els.map(el=>el.value));assert.equal(names[0],'BD in');assert.ok(names[13].includes('Lead'));assert.ok(!names.some(n=>/VIDEO|MONITOR|CIRCUIT|NEEDED|DRUMS.*1.?7/i.test(n)));
  await page.locator('[data-import-option="name"]').fill('Patch 14 voies · Image');await page.locator('[data-import-option="name"]').press('Tab');
  await page.locator('.import-edit-table').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'rider-image-preview.png')});

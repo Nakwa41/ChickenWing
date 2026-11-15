@@ -52,13 +52,13 @@ SM86|c|card|required|vocal|74
 SM87A|c|super|required|vocal|67
 SM81|c|card|required|pencil|89
 SM94|c|card|battery|pencil|56|Phantom ou pile interne.
-BETA 52A|d|super|none|kick|97||Beta52,Beta52A,Beta 52
-BETA 56A|d|super|none|tom,snare|82||Beta56,Beta56A
-BETA 57A|d|super|none|snare,amp,vocal|85||Beta57,Beta57A
-BETA 58A|d|super|none|vocal|97|Supercardioïde : éviter de placer le retour exactement dans le lobe arrière.|Beta58,Beta58A
-BETA 87A|c|super|required|vocal|88||Beta87A
-BETA 87C|c|card|required|vocal|76||Beta87C
-BETA 91A|c|card|required|kick,boundary|96|Directivité demi-cardioïde sur une surface ; préampli intégré.|Beta91A
+BETA 52A|d|super|none|kick|97||Beta52,B52,B52A
+BETA 56A|d|super|none|tom,snare|82||Beta56,B56,B56A
+BETA 57A|d|super|none|snare,amp,vocal|85||Beta57,B57,B57A
+BETA 58A|d|super|none|vocal|97|Supercardioïde : éviter de placer le retour exactement dans le lobe arrière.|Beta58,B58,B58A
+BETA 87A|c|super|required|vocal|88||B87A
+BETA 87C|c|card|required|vocal|76||B87C
+BETA 91A|c|card|required|kick,boundary|96|Directivité demi-cardioïde sur une surface ; préampli intégré.|Beta91,B91,B91A
 BETA 98H/C|c|card|required|clip|84|Version filaire avec préampli XLR ; la version WB98H/C HF est différente.|Beta98HC
 BETA 181/C|c|card|required|pencil,snare|66|Corps BETA 181 avec capsule cardioïde.
 KSM8|d|card|none|vocal|83|Double diaphragme dynamique, pas un statique.
@@ -429,12 +429,72 @@ COS-11D HF|c|omni|adapter|lav|90|Version basse tension pour émetteur : 3–10 V
 const three='Omni · cardioïde · figure en 8',nine='Omni · cardioïde large · cardioïde · hypercardioïde · figure en 8 et positions intermédiaires';
 const polarDetails={KSM9:'Cardioïde · supercardioïde',KSM9HS:'Subcardioïde · hypercardioïde',KSM44A:three,KSM141:'Cardioïde · omni','e 965':'Cardioïde · supercardioïde','MMK 965-1':'Cardioïde · supercardioïde','MK 8':'Omni · large · cardioïde · supercardioïde · figure en 8','U 87 Ai':three,'TLM 107':'Omni · large · cardioïde · hypercardioïde · figure en 8','TLM 67':three,'TLM 170 R':'Omni · large · cardioïde · hypercardioïde · figure en 8','U 67':three,'M 149 Tube':nine,'C414 XLS':nine,'C414 XLII':nine,C314:'Omni · cardioïde · supercardioïde · figure en 8','C1000 S':'Cardioïde · hypercardioïde avec accessoire PPC',P420:three,'P820 Tube':nine,'C12 VR':nine,AT2050:three,AT4050:three,'NT2-A':three,NT2000:'Omni à figure en 8, réglage continu',NT55:'Cardioïde ou omni, par échange de capsule',K2:'Omni à figure en 8, réglage continu','MTP 940 CM':'Cardioïde large · cardioïde · supercardioïde','LCT 441 FLEX':'Omni · large · cardioïde · supercardioïde · figure en 8 et directivités inversées','LCT 640 TS':'Omni · large · cardioïde · supercardioïde · figure en 8',sE2300:three,sE4400:'Omni · cardioïde · hypercardioïde · figure en 8',OC818:'Omni · cardioïde · hypercardioïde · figure en 8','TF39 Copperhead Deluxe':nine,TF47:three,TF51:nine,'ELA M 251E':three,U47:'Cardioïde · omni',C12:nine};
 export const MICROPHONES=entries.map(m=>({...m,polarDetail:polarDetails[m.model]||PATTERNS[m.pattern],channels:m.channels===2||['SF-12','SF-24','R88','R88A','ProD2','JDI Duplex','DI20 Ultra-DI','DN200'].includes(m.model)?2:1,liveRank:Math.min(100,m.rank+(m.families.includes('vocal')||m.families.includes('di')?2:0)-(m.families.includes('studio')?12:0)),studioRank:Math.min(100,m.rank+(m.families.includes('studio')||m.families.includes('ribbon')?2:0)),sourceUrl:SOURCES[m.source][1]}));
-const exact=new Map();for(const m of MICROPHONES)for(const key of [m.brand+' '+m.model,m.model,...m.aliases,...m.aliases.map(a=>m.brand+' '+a)]){const normalized=normalizeMic(key);if(!exact.has(normalized))exact.set(normalized,m);else if(exact.get(normalized)?.id!==m.id)exact.set(normalized,null);}
+const exact=new Map();for(const m of MICROPHONES)for(const key of [m.model,...m.aliases])for(const name of [key,m.brand+' '+key]){const normalized=normalizeMic(name);if(!exact.has(normalized))exact.set(normalized,m);else if(exact.get(normalized)?.id!==m.id)exact.set(normalized,null);}
 export function resolveMic(name,custom=[]){return custom.find(m=>normalizeMic(m.brand+' '+m.model)===normalizeMic(name))||exact.get(normalizeMic(name))||null;}
+
+const parseMicCode=key=>/^([a-z]*)(\d+)([a-z][a-z0-9]*)?$/.exec(key);
+const micForms=model=>{
+ const keys=[...new Set([model.model,...(model.aliases||[])].map(normalizeMic))];
+ const brandWords=model.brand.split(/[\s-]+/).map(normalizeMic).filter(Boolean);
+ return {model,brand:normalizeMic(model.brand),initials:brandWords.length>1?brandWords.map(w=>w[0]).join(''):'',keys,codes:keys.map(parseMicCode).filter(Boolean)};
+};
+const catalogForms=MICROPHONES.map(micForms);
+function oneLetterEdit(a,b){
+ if(a===b||Math.abs(a.length-b.length)>1)return false;
+ if(a.length>b.length)[a,b]=[b,a];
+ let i=0;while(i<a.length&&a[i]===b[i])i++;
+ if(a.length<b.length)return a.slice(i)===b.slice(i+1);
+ return a.slice(i+1)===b.slice(i+1)||a[i]===b[i+1]&&a[i+1]===b[i]&&a.slice(i+2)===b.slice(i+2);
+}
+function closeMicCode(query,reference,allowMissingSeries,model){
+ const [,series,number,suffix='']=query,[,refSeries,refNumber,refSuffix='']=reference;
+ if(number!==refNumber)return false;
+ // A suffix can identify the connection, power supply or version. Never change it or omit its digits.
+ if(suffix!==refSuffix&&(!refSuffix.startsWith(suffix)||/\d/.test(refSuffix.slice(suffix.length))||['adapter','wireless','split'].includes(model.power)))return false;
+ if(!series)return allowMissingSeries;
+ return refSeries.startsWith(series)||suffix===refSuffix&&number.length>=2&&series.length>=2&&refSeries.length>=2&&oneLetterEdit(series,refSeries);
+}
+function matchMicNames(value,custom,{bareNumber=false}={}){
+ const name=String(value??'').trim(),key=normalizeMic(name),model=resolveMic(name,custom);
+ if(model)return {models:[model],approximate:false};
+ // An ambiguous exact name or a list of alternatives is never resolved by guessing.
+ const numeric=bareNumber&&/^\d{3,4}$/.test(name);
+ if(exact.has(key)||name.length>80||!numeric&&!/^\p{L}[\p{L}\d\s.-]*$/u.test(name)||/\b(?:ou|or)\b/i.test(name))return {models:[],approximate:false};
+ const words=name.split(/\s+/),queries=[];
+ for(let i=0;i<words.length;i++){
+  const brand=normalizeMic(words.slice(0,i).join(' ')),label=words.slice(i).join(' '),codeKey=normalizeMic(label);
+  // Only allow spaces inside the model code once its number starts (e.g. TLM 170 R).
+  const code=/^[a-z]*[.\s-]*\d/i.test(label)?parseMicCode(codeKey):null;
+  if(brand||code)queries.push({brand,codeKey,code});
+ }
+ const candidates=new Map();
+ for(const entry of [...catalogForms,...custom.map(micForms)]){
+  if(!queries.some(({brand,codeKey,code})=>{
+   if(brand&&brand!==entry.brand&&brand!==entry.initials&&!(brand.length>=3&&(entry.brand.startsWith(brand)||entry.brand.length>=5&&oneLetterEdit(brand,entry.brand))))return false;
+   return brand&&entry.keys.includes(codeKey)||code&&entry.codes.some(ref=>closeMicCode(code,ref,!!brand||numeric,entry.model));
+  }))continue;
+  candidates.set(entry.model.id,entry.model);
+ }
+ return {models:[...candidates.values()],approximate:true};
+}
+export function matchImportedMic(value,custom=[],options={}){
+ const {models,approximate}=matchMicNames(value,custom,options);
+ return models.length===1?{model:models[0],approximate}:null;
+}
 export function searchMicrophones({query='',brand='',type='',power='',use='',context='',sort='popular',custom=[]}={}){
  const words=String(query).trim().split(/\s+/).map(normalizeMic).filter(Boolean);
+ const nameMatches=new Set(matchMicNames(query,custom,{bareNumber:true}).models.map(m=>m.id));
  const matches=m=>{const text=[m.brand,m.model,...(m.aliases||[]),TYPES[m.type],PATTERNS[m.pattern],POWER[m.power]?.label,m.note,...m.families.flatMap(f=>[USES[f]?.label,...USES[f]?.tags||[]])].join(' '),tokens=text.split(/[\s·/,;:()—-]+/).map(normalizeMic),flat=normalizeMic(text);return words.every(w=>w==='di'?['di','dp'].includes(m.type):w==='oh'?m.families.includes('pencil'):w.length<=2?tokens.includes(w)||normalizeMic(m.model).startsWith(w):flat.includes(w));};
- return [...MICROPHONES,...custom].filter(m=>(!brand||m.brand===brand)&&(!type||m.type===type)&&(!power||m.power===power)&&(!use||m.families.includes(use))&&(!context||m.families.some(f=>USES[f]?.contexts.includes(context)))&&matches(m)).sort((a,b)=>sort==='name'?(a.brand+' '+a.model).localeCompare(b.brand+' '+b.model):((sort==='live'?b.liveRank:sort==='studio'?b.studioRank:b.rank)||0)-((sort==='live'?a.liveRank:sort==='studio'?a.studioRank:a.rank)||0)||(a.brand+' '+a.model).localeCompare(b.brand+' '+b.model));
+ const matchesFilters=m=>(!brand||m.brand===brand)&&(!type||m.type===type)&&(!power||m.power===power)&&(!use||m.families.includes(use))&&(!context||m.families.some(f=>USES[f]?.contexts.includes(context)));
+ const rankKey=sort==='live'?'liveRank':sort==='studio'?'studioRank':'rank';
+ const compareName=(a,b)=>`${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
+ return [...MICROPHONES,...custom]
+  .filter(m=>matchesFilters(m)&&(nameMatches.has(m.id)||matches(m)))
+  .sort((a,b)=>{
+   if(sort==='name')return compareName(a,b);
+   if(sort==='relevance'&&nameMatches.has(a.id)!==nameMatches.has(b.id))return nameMatches.has(a.id)?-1:1;
+   return (b[rankKey]||0)-(a[rankKey]||0)||compareName(a,b);
+  });
 }
 export function alternatives(m,{custom=[],limit=6}={}){
  // Same principal application; avoid presenting HF capsules or special power arrangements as drop-in replacements.

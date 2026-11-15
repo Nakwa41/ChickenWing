@@ -7,7 +7,8 @@ Les sources ci-dessous sont des notices, fiches et catalogues des fabricants. Pl
 ## Automatisation du 48 V
 
 - Choisir explicitement un modèle applique sa politique sur LCL / AES50 A, B ou C, ainsi qu’aux voies partageant cette même source et ce même format.
-- Les imports et modèles de patchs utilisent les correspondances exactes de la base ; une valeur 48 V explicite du document reste prioritaire. Les imports restent marqués à vérifier.
+- Les imports reconnaissent les noms et les alias du catalogue (par exemple B52, B58 ou B91). Ils préparent le 48 V prévu par la fiche du modèle ; une valeur 48 V explicite du document reste prioritaire.
+- Pour l’ensemble du catalogue, l’import peut aussi retrouver un modèle unique à partir d’une marque abrégée, d’un code incomplet ou d’une petite faute de frappe. Il garde le libellé d’origine dans l’aperçu et affiche le nom du modèle proposé. Le 48 V reste manuel jusqu’à confirmation du modèle. Les cas ambigus, comme B87 ou C414, et les alternatives restent des libellés libres. Les voies importées restent marquées à vérifier.
 - Un modèle passif coupe le 48 V ; un modèle nécessitant le phantom l’active. Les dynamiques actifs et rubans actifs ont des politiques distinctes.
 - Les modèles à pile ou phantom proposent les deux choix. Le D12 VR est passif par défaut ; ses filtres actifs demandent un choix explicite. Le SM7dB propose préampli actif ou bypass.
 - Les modèles à alimentation dédiée, capsules HF et miniatures sans adaptateur identifié ne déclenchent pas le phantom. Un hybride à sorties séparées demande de configurer chaque élément séparément.

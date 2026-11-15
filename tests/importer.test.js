@@ -16,6 +16,35 @@ test('numbered OCR text recovers exact mic suffixes and preserves unknown labels
  const r=parseRider('1 Kick In Shure SM57\n2 Lead Vocal Beta58A\n3 Guitare Micro inconnu');
  assert.equal(r.channels[0].name,'Kick In');assert.equal(r.channels[0].mic,'Shure SM57');assert.equal(r.channels[1].micId,'shurebeta58a');assert.equal(r.channels[2].name,'Guitare Micro inconnu');
 });
+test('rider abbreviations find catalogue profiles across brands and stay traceable',()=>{
+ const labels=['Shure B-58','B52','Senn 906','Neu KM184','KN184','TLM170','421','EV RE20','Radal ProDI'];
+ const text='CH;Source;Micro\n'+labels.map((label,i)=>`${i+1};Source ${i+1};${label}`).join('\n');
+ const p=make(text);assert.deepEqual(p.errors,[]);
+ const channels=assertProject(p.show).channels;
+ assert.deepEqual(channels.map(c=>c.micProfile?.id),['shurebeta58a','shurebeta52a','sennheisere906','neumannkm184','neumannkm184','neumanntlm170r','sennheisermd421ii','electrovoicere20','radialprodi']);
+ assert.deepEqual(channels.map(c=>c.importMeta.micOriginal),labels);
+ assert.ok(channels.slice(2).every(c=>c.importMeta.micApproximate&&c.phantomMode==='manual'&&!c.phantom));
+ assert.ok(channels.slice(0,2).every(c=>!c.importMeta.micApproximate&&c.phantomMode==='auto'));
+});
+test('incomplete references keep ambiguous variants, alternatives and wireless equipment unresolved',()=>{
+ const labels=['B87','C414','C414 XL','AKG 414','KM18','KM184X','MKH416','B58 HF','Shure KM184','B58 / SM58'];
+ const r=parseRider('CH;Source;Micro\n'+labels.map((label,i)=>`${i+1};Source ${i+1};${label}`).join('\n'));
+ assert.deepEqual(r.channels.map(c=>c.mic),labels);
+ assert.ok(r.channels.every(c=>!c.micId&&!c.phantom));
+});
+test('abbreviations survive flattened and inline patches without binding a wireless capsule to a wired model',()=>{
+ const text='1 Kick B52\n2 Voix B58\n3 Overhead K184\nPatch RIO IN: In4: Voix Shure Axient AD2 caps B58 / In5: Voix B87C';
+ const r=parseRider(text);
+ assert.deepEqual(r.channels.map(c=>c.name),['Kick','Voix','Overhead','Voix Shure Axient AD2 caps B58','Voix B87C']);
+ assert.deepEqual(r.channels.map(c=>c.micId),['shurebeta52a','shurebeta58a','neumannkm184',undefined,'shurebeta87c']);
+ assert.deepEqual(r.channels.map(c=>c.phantom),[false,false,false,false,true]);
+});
+test('known abbreviations prepare phantom and explicit indications override both match types',()=>{
+ const r=parseRider('CH;Source;Micro;48V\n1;Kick In;B91;\n2;Kick In spare;B91;non\n3;OH;Neuman KM184;oui');
+ assert.deepEqual(r.channels.map(c=>[c.micId,c.phantom,c.phantomMode]),[
+  ['shurebeta91a',true,'auto'],['shurebeta91a',false,'manual'],['neumannkm184',true,'manual']
+ ]);
+});
 test('input headers and absent channel numbers work without discarding rows',()=>{
  const r=parseRider('Input\tInstrument\tMicrophone\n01\tSnare\tSM57\n02\tVoix\tSM58');assert.deepEqual(r.channels.map(c=>c.n),[1,2]);
  const r2=parseRider('Source;Micro\nKick;Beta91\nOH;KM184');assert.deepEqual(r2.channels.map(c=>c.n),[1,2]);
