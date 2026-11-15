@@ -1,0 +1,24 @@
+SON
+1x Console Yamaha DM7 / DM7 Compact (pas d’autre console)
+1x RIO3224-D
+1x iPad + Routeur wifi
+1x Afficheur de niveau dBA Leq15 et dBC Leq15.
+3x Retours identiques: X15 + LA12X (modèle demandé)
+1x Petit retour 5 ou 8 pouce à la commande du rideau
+1x Petit Sub : KS21 (ou équivalent)
+1x Tube droit d’enceinte sur le SUB
+2x Shure Axient AD4D double récepteur
+2x Shure Axient AD1 Body Pack
+2x Shure Axient AD2 Micro Main caps B58
+1x DPA 4066
+1x SM58 TB
+3x KM 184
+3x Petit Pied Micro
+2x Pieds d’enceintes embases lourdes noirs
+1x Pied Micros droit embase ronde
+
+UNE REGIE FOH
+Patch RIO OUT: Out 1: Side Left / Out 2: Side Cour / Out 3 : Retour Coulisse / Out 4 : Retour Sub / Out 5 : Retour Rideau
+Patch RIO IN: In1: DPA 1 / In2: DPA 2 / In3: Main 1 / In4: Main 2 / In5: KM184 Jar / In6: KM184 Centre / In7: KM184 Cour
+Patch Console OUT: Out 1: Rec 1 / Out 2: Rec 2 / Out 3: Rec 3 / Out 4: Rec 4 / Out 5: Rec 5
+Patch Console IN: In 1: Ordi L / In 2: Ordi R / In 3: Spare L / In 4: Spare R / In 8: TB

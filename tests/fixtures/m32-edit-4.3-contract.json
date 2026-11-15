@@ -1,0 +1,225 @@
+{
+  "origin": "Scène exportée par ChickenWing, chargée puis réenregistrée dans M32-Edit 4.3 hors connexion le 29 octobre 2026. Seuls les nœuds de la préparation de contrôle sont conservés.",
+  "nodes": {
+    "/config/routing/IN": [
+      "UIN1-8",
+      "UIN9-16",
+      "UIN17-24",
+      "UIN25-32",
+      "AUX1-4"
+    ],
+    "/config/routing/OUT": [
+      "UOUT1-4",
+      "UOUT5-8",
+      "UOUT9-12",
+      "UOUT13-16"
+    ],
+    "/config/routing/AES50A": [
+      "UOUT17-24",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8"
+    ],
+    "/config/routing/AES50B": [
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8"
+    ],
+    "/config/routing/CARD": [
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8",
+      "UOUT1-8"
+    ],
+    "/config/userrout/in": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "127",
+      "128",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "/config/userrout/out": [
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "169",
+      "170",
+      "171",
+      "172",
+      "173",
+      "174",
+      "175",
+      "176",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "/config/chlink": [
+      "OFF",
+      "OFF",
+      "ON",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF"
+    ],
+    "/config/buslink": [
+      "OFF",
+      "ON",
+      "ON",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF",
+      "OFF"
+    ],
+    "/ch/01/config": [
+      "Voie 1",
+      "1",
+      "YE",
+      "1"
+    ],
+    "/ch/05/config": [
+      "Overheads",
+      "1",
+      "WH",
+      "5"
+    ],
+    "/ch/06/config": [
+      "Overheads",
+      "1",
+      "WH",
+      "6"
+    ],
+    "/headamp/000": [
+      "+24.0",
+      "ON"
+    ],
+    "/headamp/126": [
+      "+12.0",
+      "ON"
+    ],
+    "/headamp/127": [
+      "+12.0",
+      "ON"
+    ],
+    "/ch/01/grp": [
+      "%00000010",
+      "%000010"
+    ],
+    "/ch/01/insert": [
+      "ON",
+      "POST",
+      "FX5L"
+    ],
+    "/ch/02/insert": [
+      "ON",
+      "POST",
+      "FX5R"
+    ],
+    "/ch/01/mix/07": [
+      "ON",
+      "-12.0",
+      "+0",
+      "POST",
+      "0"
+    ],
+    "/fx/1": [
+      "HALL"
+    ],
+    "/fx/1/source": [
+      "MIX7",
+      "MIX7"
+    ],
+    "/fxrtn/01/mix": [
+      "OFF",
+      "-12.0",
+      "ON",
+      "-100",
+      "OFF",
+      "-oo"
+    ],
+    "/main/st/mix/01": [
+      "ON",
+      "-3.0",
+      "+0",
+      "POST",
+      "0"
+    ]
+  }
+}
